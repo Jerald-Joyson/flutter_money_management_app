@@ -47,7 +47,7 @@ Future<void> showCategoryAddPopup(BuildContext context) async {
                   name: _name,
                   type: _type,
                 );
-                CategoryDB().insertCategory(_category);
+                CategoryDB.instance.insertCategory(_category);
                 Navigator.of(ctx).pop();
               },
               child: const Text('add'),
