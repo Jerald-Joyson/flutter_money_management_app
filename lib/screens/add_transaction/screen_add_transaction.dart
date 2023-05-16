@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_money_management_app/db/category/category_db.dart';
+import 'package:flutter_money_management_app/db/transactions/transaction_db.dart';
 import 'package:flutter_money_management_app/models/category/category_model.dart';
+import 'package:flutter_money_management_app/models/transaction/transaction_model.dart';
 
 class ScreenAddTransaction extends StatefulWidget {
   static const routeName = 'add-transaction';
@@ -15,6 +17,17 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
   CategoryType? _selectedCategoryType;
   CategoryModel? _selectedCategoryModel;
 
+  String? _categoryID;
+
+  final _purposeTextEditingController = TextEditingController();
+  final _amountTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    _selectedCategoryType = CategoryType.income;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +39,13 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
             children: [
               //purpose
               TextFormField(
+                controller: _purposeTextEditingController,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(hintText: 'Purpose'),
               ),
               //amount
               TextFormField(
+                controller: _amountTextEditingController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(hintText: 'Amount'),
               ),
@@ -68,8 +83,13 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                     //income
                     Radio(
                       value: CategoryType.income,
-                      groupValue: CategoryType.income,
-                      onChanged: (newValue) {},
+                      groupValue: _selectedCategoryType,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedCategoryType = CategoryType.income;
+                          _categoryID = null;
+                        });
+                      },
                     ),
                     Text('Income'),
                   ]),
@@ -78,8 +98,13 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                       //expense
                       Radio(
                         value: CategoryType.expense,
-                        groupValue: CategoryType.income,
-                        onChanged: (newValue) {},
+                        groupValue: _selectedCategoryType,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedCategoryType = CategoryType.expense;
+                            _categoryID = null;
+                          });
+                        },
                       ),
                       Text('Expense'),
                     ],
@@ -87,22 +112,34 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                 ],
               ),
               //category type
-              DropdownButton(
+              DropdownButton<String>(
                 hint: Text('Select Category'),
-                items: CategoryDB.instance.expenseCaregoryListListener.value
+                value: _categoryID,
+                items: (_selectedCategoryType == CategoryType.income
+                        ? CategoryDB().incomeCaregoryListListener
+                        : CategoryDB().expenseCaregoryListListener)
+                    .value
                     .map((e) {
                   return DropdownMenuItem(
                     value: e.id,
                     child: Text(e.name),
+                    onTap: () {
+                      _selectedCategoryModel = e;
+                    },
                   );
                 }).toList(),
                 onChanged: (selectedValue) {
                   print(selectedValue);
+                  setState(() {
+                    _categoryID = selectedValue;
+                  });
                 },
               ),
               //Submit
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  addTransaction();
+                },
                 child: Text('Submit'),
               ),
             ],
@@ -110,5 +147,45 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
         ),
       ),
     );
+  }
+
+  Future<void> addTransaction() async {
+    final _purposeText = _purposeTextEditingController.text;
+    final _amountText = _amountTextEditingController.text;
+
+    if (_purposeText.isEmpty) {
+      return;
+    }
+    if (_amountText.isEmpty) {
+      return;
+    }
+    if (_categoryID == null) {
+      return;
+    }
+    if (_selectedDate == null) {
+      return;
+    }
+
+    final _parsedAmount = double.tryParse(_amountText);
+    if (_parsedAmount == null) {
+      return;
+    }
+    if (_selectedCategoryModel == null) {
+      return;
+    }
+
+    //_selectedDate
+    //_selectedCategoryType
+    //_categoryID
+
+    final _model = TransactionModel(
+      purpose: _purposeText,
+      amount: _parsedAmount,
+      date: _selectedDate!,
+      type: _selectedCategoryType!,
+      category: _selectedCategoryModel!,
+    );
+
+    TransactionDB.instance.addTransaction(_model);
   }
 }
