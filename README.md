@@ -1,6 +1,22 @@
 # flutter_money_management_app
 
-A new Flutter project.
+My new Flutter project
+
+
+## Description
+
+It is just a Money Mangement Application where we can enter our Income and Expense amount
+
+## Web App
+
+To Experience my web app [Click Here](https://jerald-joyson.github.io/).
+
+ ## apk file download
+  * [Money_Manager.apk](Money_Manager) Click "View raw".
+
+
+
+
 
 ## Getting Started
 
