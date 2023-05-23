@@ -33,22 +33,38 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(30.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(
+                height: 30,
+              ),
               //purpose
               TextFormField(
                 controller: _purposeTextEditingController,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(hintText: 'Purpose'),
+                decoration: InputDecoration(
+                  hintText: 'Purpose',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
               //amount
               TextFormField(
                 controller: _amountTextEditingController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(hintText: 'Amount'),
+                decoration: InputDecoration(
+                  hintText: 'Amount',
+                  border: OutlineInputBorder(),
+                ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+
               //calender
 
               TextButton.icon(
@@ -75,7 +91,9 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                     ? 'select Date'
                     : _selectedDate!.toString()),
               ),
-
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -111,6 +129,7 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                   ),
                 ],
               ),
+
               //category type
               DropdownButton<String>(
                 hint: Text('Select Category'),
@@ -135,12 +154,15 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                   });
                 },
               ),
+              const SizedBox(
+                height: 30,
+              ),
               //Submit
               ElevatedButton(
                 onPressed: () {
                   addTransaction();
                 },
-                child: Text('Submit'),
+                child: Text('    Submit    '),
               ),
             ],
           ),
