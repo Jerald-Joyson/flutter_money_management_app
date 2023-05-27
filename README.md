@@ -9,7 +9,7 @@ It is just a Money Mangement Application where we can enter our Income and Expen
 
 ## Web App
 
-To Experience my web app [Click Here](https://jerald-joyson.github.io/).
+To Experience my web app [Click Here]([https://jerald-joyson.github.io/](https://jerald-joyson.github.io/flutter_money_manager.github.io/)).
 
  ## apk file download
   * [Money_Manager.apk](Money_Manager) Click "View raw".
